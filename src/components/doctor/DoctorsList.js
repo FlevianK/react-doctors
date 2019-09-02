@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Table, Thead, Tbody, Tr, Th } from 'react-super-responsive-table';
@@ -63,95 +63,87 @@ const NoDataDiv = styled.div`
   color: ${accent};
 `;
 
-class DoctorsList extends Component {
-  renderTableData () {
-    return this.props.doctorsDetails.data.map(
-      ({ name, practices, specialties }, index) => {
-        return (
-          <CustomTr key={index}>
-            <td>
-              <PracticehWrapper>{name}</PracticehWrapper>
-            </td>
-            <td>
-              {specialties &&
-                specialties.map((speciality, index) => (
-                  <PracticehWrapper key={index}>{speciality}</PracticehWrapper>
-                ))}
-            </td>
-            <td>
-              {practices &&
-                practices.map(
-                  (
-                    { acceptsNewPatients, address, phones, medicalCenterName },
-                    index
-                  ) => (
-                    <PracticehWrapper key={index}>
-                      Medical Center: {medicalCenterName} <br />
-                      Accepts new Patients:
-                      {acceptsNewPatients} <br /> Address: {address} <br />
-                      Phones: {phones}
-                    </PracticehWrapper>
-                  )
-                )}
-            </td>
-          </CustomTr>
-        );
-      }
-    );
-  }
+const renderTableData = (data) => {
+  return data.map(
+    ({ name, practices, specialties }, index) => {
+      return (
+        <CustomTr key={index}>
+          <td>
+            <PracticehWrapper>{name}</PracticehWrapper>
+          </td>
+          <td>
+            {specialties &&
+              specialties.map((speciality, index) => (
+                <PracticehWrapper key={index}>{speciality}</PracticehWrapper>
+              ))}
+          </td>
+          <td>
+            {practices &&
+              practices.map(
+                (
+                  { acceptsNewPatients, address, phones, medicalCenterName },
+                  index
+                ) => (
+                  <PracticehWrapper key={index}>
+                    Medical Center: {medicalCenterName} <br />
+                    Accepts new Patients:
+                    {acceptsNewPatients} <br /> Address: {address} <br />
+                    Phones: {phones}
+                  </PracticehWrapper>
+                )
+              )}
+          </td>
+        </CustomTr>
+      );
+    }
+  );
+};
 
-  render () {
-    const {
-      activePage,
-      handlePageChange,
-      hasNextPage,
-      doctorsDetails
-    } = this.props;
-    return doctorsDetails.data[0].data ? (
-      <NoDataDiv>{doctorsDetails.data[0].data}</NoDataDiv>
-    ) : (
-      <Fragment>
-        <ReactTableWrapper>
-          <Table>
-            <Thead>
-              <Tr>
-                <Th>
-                  <TitleWrapper>Name</TitleWrapper>
-                </Th>
-                <Th>
-                  <TitleWrapper>Specialties</TitleWrapper>
-                </Th>
-                <Th>
-                  <TitleWrapper>Practices</TitleWrapper>
-                </Th>
-              </Tr>
-            </Thead>
-            <Tbody>{this.renderTableData()}</Tbody>
-          </Table>
-        </ReactTableWrapper>
-        <IconButtonWrapper>
-          {activePage > 1 ? (
-            <IconButton onClick={handlePageChange()}>
-              <ChevronIcon rotate={270} />
-              <LabelWrapper>Back</LabelWrapper>
-            </IconButton>
-          ) : (
-            <LabelPlaceholder />
-          )}
-          <div> Page {activePage} </div>
-          {hasNextPage ? (
-            <IconButton onClick={handlePageChange('next')}>
-              <LabelWrapper>Forward</LabelWrapper>
-              <ChevronIcon rotate={90} />
-            </IconButton>
-          ) : (
-            <LabelPlaceholder />
-          )}
-        </IconButtonWrapper>
-      </Fragment>
-    );
-  }
-}
+const DoctorsList = ({ doctorsDetails, activePage, handlePageChange, hasNextPage }) => {
+  return doctorsDetails.data[0].data ? (
+    <NoDataDiv>{doctorsDetails.data[0].data}</NoDataDiv>
+  ) : (
+    <Fragment>
+      <ReactTableWrapper>
+        <Table>
+          <Thead>
+            <Tr>
+              <Th>
+                <TitleWrapper>Name</TitleWrapper>
+              </Th>
+              <Th>
+                <TitleWrapper>Specialties</TitleWrapper>
+              </Th>
+              <Th>
+                <TitleWrapper>Practices</TitleWrapper>
+              </Th>
+            </Tr>
+          </Thead>
+          <Tbody>{renderTableData(doctorsDetails.data)}</Tbody>
+        </Table>
+      </ReactTableWrapper>
+      <IconButtonWrapper>
+        {activePage > 1 ? (
+          <IconButton onClick={handlePageChange()}>
+            <ChevronIcon rotate={270} />
+            <LabelWrapper>Back</LabelWrapper>
+          </IconButton>
+        ) : (
+          <LabelPlaceholder />
+        )}
+        <div> Page {activePage} </div>
+        {hasNextPage ? (
+          <IconButton onClick={handlePageChange('next')}>
+            <LabelWrapper>Forward</LabelWrapper>
+            <ChevronIcon rotate={90} />
+          </IconButton>
+        ) : (
+          <LabelPlaceholder />
+        )}
+      </IconButtonWrapper>
+    </Fragment>
+  );
+};
 
 DoctorsList.propTypes = {
   activePage: PropTypes.number,
