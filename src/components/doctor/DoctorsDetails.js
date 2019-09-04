@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import toastr from 'toastr';
 
 import DoctoctsList from './DoctorsList';
 import DoctorsSearch from './DoctorsSearch';
@@ -67,9 +66,8 @@ const DoctorsDetails = (props) => {
       setRadius(100);
       setHasNextPage(false);
       getDoctors(searchValue, limit, offset, radius);
-      setSearchValue('my-current-location');
     } else {
-      toastr.error('Type location name');
+      setSearchValue('my-current-location');
     }
   };
 
@@ -97,7 +95,8 @@ const DoctorsDetails = (props) => {
       )}
     </DoctorsDetailsWrapper>
   );
-}
+};
+
 DoctorsDetails.propTypes = {
   doctorsDetails: PropTypes.object,
   getDoctors: PropTypes.func.isRequired
