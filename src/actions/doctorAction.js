@@ -36,20 +36,19 @@ const getSearchedLocationLatLng = async location => {
   }
 };
 
-export const getDoctors = (location, limit, offset, radius) => {
+export const getDoctors = async (location, limit, offset, radius, dispatch) => {
   /**
    * getDoctors method
    * @params data - search value, limit and offset
    * @return all doctors depending on the loation and specified range
    *
    */
-  return async dispatch => {
-    try {
-      const coordinates =
+  try {
+    const coordinates =
         location === 'my-current-location' ?
           await getCurrentLocationLatLng() :
           await getSearchedLocationLatLng(location);
-      const response =
+    const response =
         location === 'my-current-location' ?
           await fetchCurrentLocationDoctors(
             coordinates[0],
@@ -65,12 +64,12 @@ export const getDoctors = (location, limit, offset, radius) => {
             offset,
             radius
           );
-      dispatch({
-        type: FETCH_DOCTORS,
-        payload: filterData(response.data)
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    const data = await filterData(response.data);
+    return dispatch({
+      type: FETCH_DOCTORS,
+      payload: data
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };

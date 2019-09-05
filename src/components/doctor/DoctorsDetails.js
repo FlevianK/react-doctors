@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
 
 import DoctoctsList from './DoctorsList';
 import DoctorsSearch from './DoctorsSearch';
 import { getDoctors } from '../../actions/doctorAction';
 import { LoadingGif } from '../foundation/icons';
+import { Store } from '../../store/Store';
 
 const DoctorsDetailsWrapper = styled.div`
   margin-bottom: 0.3rem;
@@ -25,8 +23,8 @@ const LoadingTextWrapper = styled.div`
   padding-top: 0.3rem;
 `;
 
-const DoctorsDetails = (props) => {
-  const { getDoctors, doctorsDetails } = props;
+const DoctorsDetails = () => {
+  const { state, dispatch } = useContext(Store);
   const [limit, setLimit] = useState(15);
   const [offset, setOffest] = useState(0);
   const [radius, setRadius] = useState(100);
@@ -35,16 +33,17 @@ const DoctorsDetails = (props) => {
   const [searchValue, setSearchValue] = useState('my-current-location');
 
   useEffect(() => {
-    getDoctors(searchValue, limit, offset, radius);
+    getDoctors(searchValue, limit, offset, radius, dispatch);
   });
 
+
   useEffect(() => {
-    if (offset + limit < doctorsDetails.total) {
+    if (offset + limit < state.doctorsDetails.total) {
       setHasNextPage(true);
     } else {
       setHasNextPage(false);
     }
-  }, [doctorsDetails, limit, offset]);
+  }, [limit, offset, state]);
 
   const handlePageChange = value => () => {
     getDoctors(searchValue, limit, offset, radius);
@@ -65,11 +64,12 @@ const DoctorsDetails = (props) => {
       setActivePage(1);
       setRadius(100);
       setHasNextPage(false);
-      getDoctors(searchValue, limit, offset, radius);
+      getDoctors(searchValue, limit, offset, radius, dispatch);
     } else {
       setSearchValue('my-current-location');
     }
   };
+
 
   return (
     <DoctorsDetailsWrapper>
@@ -78,9 +78,9 @@ const DoctorsDetails = (props) => {
         onDoctorClick={onDoctorClick}
         onKeyPress={e => e.key === 'Enter' && onDoctorClick(e)}
       />
-      {doctorsDetails.data && doctorsDetails.data.length ? (
+      {state.doctorsDetails.data && state.doctorsDetails.data.length ? (
         <DoctoctsList
-          doctorsDetails={doctorsDetails}
+          doctorsDetails={state.doctorsDetails}
           handlePageChange={handlePageChange}
           activePage={activePage}
           hasNextPage={hasNextPage}
@@ -89,7 +89,7 @@ const DoctorsDetails = (props) => {
         <LoadingGifWrapper>
           <LoadingGif />
           <LoadingTextWrapper>
-              Loading Current location data
+                Loading Current location data
           </LoadingTextWrapper>
         </LoadingGifWrapper>
       )}
@@ -97,19 +97,4 @@ const DoctorsDetails = (props) => {
   );
 };
 
-DoctorsDetails.propTypes = {
-  doctorsDetails: PropTypes.object,
-  getDoctors: PropTypes.func.isRequired
-};
-
-const mapStateToProps = state => ({
-  doctorsDetails: state.doctorsDetails
-});
-
-const mapDispatchToProps = dispatch =>
-  bindActionCreators({ getDoctors }, dispatch);
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(DoctorsDetails);
+export default DoctorsDetails;

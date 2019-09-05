@@ -39,5 +39,5 @@ export const filterData = payload => {
     ) :
     [{ data: 'No data available' }];
 
-  return { total: payload.meta.total, data: data };
+  return { total: payload.meta.total || 0, data: data };
 };
