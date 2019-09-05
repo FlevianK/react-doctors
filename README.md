@@ -1,4 +1,5 @@
 ## Better Doctors search interface
+- Build using react, react hooks and style-component css
 
 ### Prerequisites
 
