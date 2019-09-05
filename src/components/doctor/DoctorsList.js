@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useContext } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Table, Thead, Tbody, Tr, Th } from 'react-super-responsive-table';
@@ -8,6 +8,7 @@ import IconButton from '../foundation/buttons/IconButton';
 import { ChevronIcon } from '../foundation/icons';
 import { Root } from '../foundation/Typography';
 import { outline, outlineLight, secondary, accent } from '../foundation/Colors';
+import { Store } from '../../store/Store';
 
 const PracticehWrapper = styled.p`
   margin: 0.3rem 0rem 0rem 0rem;
@@ -99,9 +100,10 @@ const renderTableData = (data) => {
   );
 };
 
-const DoctorsList = ({ doctorsDetails, activePage, handlePageChange, hasNextPage }) => {
-  return doctorsDetails.data[0].data ? (
-    <NoDataDiv>{doctorsDetails.data[0].data}</NoDataDiv>
+const DoctorsList = ({ activePage, handlePageChange, hasNextPage }) => {
+  const { state } = useContext(Store);
+  return state.doctorsDetails.data[0].data ? (
+    <NoDataDiv>{state.doctorsDetails.data[0].data}</NoDataDiv>
   ) : (
     <Fragment>
       <ReactTableWrapper>
@@ -119,7 +121,7 @@ const DoctorsList = ({ doctorsDetails, activePage, handlePageChange, hasNextPage
               </Th>
             </Tr>
           </Thead>
-          <Tbody>{renderTableData(doctorsDetails.data)}</Tbody>
+          <Tbody>{renderTableData(state.doctorsDetails.data)}</Tbody>
         </Table>
       </ReactTableWrapper>
       <IconButtonWrapper>
@@ -148,7 +150,6 @@ const DoctorsList = ({ doctorsDetails, activePage, handlePageChange, hasNextPage
 DoctorsList.propTypes = {
   activePage: PropTypes.number,
   hasNextPage: PropTypes.bool,
-  doctorsDetails: PropTypes.object,
   handlePageChange: PropTypes.func
 };
 

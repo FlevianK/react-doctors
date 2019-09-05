@@ -78,9 +78,8 @@ const DoctorsDetails = () => {
         onDoctorClick={onDoctorClick}
         onKeyPress={e => e.key === 'Enter' && onDoctorClick(e)}
       />
-      {state.doctorsDetails.data && state.doctorsDetails.data.length ? (
+      {state.doctorsDetails.total > 0 ? (
         <DoctoctsList
-          doctorsDetails={state.doctorsDetails}
           handlePageChange={handlePageChange}
           activePage={activePage}
           hasNextPage={hasNextPage}
