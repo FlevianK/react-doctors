@@ -6,7 +6,8 @@
   "extends": "react",
   "env": {
     "browser": true,
-    "node": true
+    "node": true,
+    "cypress/globals": true
   },
   "settings": {
     "react": {
@@ -16,9 +17,16 @@
   "rules": {
     "indent": ["error", 2],
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn"
+    "react-hooks/exhaustive-deps": "warn",
+    "cypress/no-assigning-return-values": "error",
+    "cypress/no-unnecessary-waiting": "error",
+    "cypress/assertion-before-screenshot": "warn",
+    "no-unused-expressions": 0,
+    "chai-friendly/no-unused-expressions": 2
   },
   "plugins": [
-    "react-hooks"
+    "react-hooks",
+    "cypress",
+    "chai-friendly"
   ]
 }
