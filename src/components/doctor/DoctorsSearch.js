@@ -62,6 +62,7 @@ const DoctorsSearch = ({ onDoctorChange, onDoctorClick, onKeyPress }) => (
       placeholder="Name e.g New York"
       onChange={onDoctorChange}
       onKeyPress={onKeyPress}
+      data-cy="search"
     />
     <IconButtonWrapper>
       <IconButton onClick={onDoctorClick}>
