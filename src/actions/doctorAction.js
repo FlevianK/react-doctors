@@ -1,13 +1,13 @@
 import toastr from 'toastr';
 
+import { FETCHED_DOCTORS, FETCHING_DOCTORS } from '../constants/action.types';
+
 import {
   fetchCurrentLocationDoctors,
   fetchSearchedLocationDoctors
 } from '../api/doctorApi';
 import { fetchLocationGeocode } from '../api/geocodeApi';
 import { filterData } from './helpers/dataFormater';
-
-export const FETCH_DOCTORS = 'FETCH_DOCTORS';
 
 const getCurrentLocationLatLng = async () =>
   navigator.geolocation ?
@@ -44,6 +44,7 @@ export const getDoctors = async (location, limit, offset, radius, dispatch) => {
    *
    */
   try {
+    dispatch({ type: FETCHING_DOCTORS });
     const coordinates =
         location === 'my-current-location' ?
           await getCurrentLocationLatLng() :
@@ -66,7 +67,7 @@ export const getDoctors = async (location, limit, offset, radius, dispatch) => {
           );
     const data = await filterData(response.data);
     return dispatch({
-      type: FETCH_DOCTORS,
+      type: FETCHED_DOCTORS,
       payload: data
     });
   } catch (error) {

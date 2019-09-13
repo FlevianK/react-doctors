@@ -34,6 +34,7 @@ const DoctorsDetails = () => {
 
   useEffect(() => {
     getDoctors(searchValue, limit, offset, radius, dispatch);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [offset]);
 
 
@@ -77,19 +78,19 @@ const DoctorsDetails = () => {
         onDoctorClick={onDoctorClick}
         onKeyPress={e => e.key === 'Enter' && onDoctorClick(e)}
       />
-      {state.doctorsDetails.total > 0 ? (
+      {state.loading ? (
+        <LoadingGifWrapper>
+          <LoadingGif />
+          <LoadingTextWrapper>
+            Loading Current location data
+          </LoadingTextWrapper>
+        </LoadingGifWrapper>
+      ) : (
         <DoctoctsList
           handlePageChange={handlePageChange}
           activePage={activePage}
           hasNextPage={hasNextPage}
         />
-      ) : (
-        <LoadingGifWrapper>
-          <LoadingGif />
-          <LoadingTextWrapper>
-                Loading Current location data
-          </LoadingTextWrapper>
-        </LoadingGifWrapper>
       )}
     </DoctorsDetailsWrapper>
   );
