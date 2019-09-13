@@ -34,7 +34,7 @@ const DoctorsDetails = () => {
 
   useEffect(() => {
     getDoctors(searchValue, limit, offset, radius, dispatch);
-  });
+  }, [offset]);
 
 
   useEffect(() => {
@@ -46,7 +46,6 @@ const DoctorsDetails = () => {
   }, [limit, offset, state]);
 
   const handlePageChange = value => () => {
-    getDoctors(searchValue, limit, offset, radius);
     if (value) {
       setOffest(offset + limit);
       setActivePage(activePage + 1);
